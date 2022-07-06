@@ -1,0 +1,18 @@
+body {
+    background-color: #eee;
+    color: #444;
+    font-family: monospace;
+    font-size: 1rem;
+}
+
+#summary {
+    font-size: 2rem;
+    text-align: center;
+    margin: 60px 20px;
+}
+
+#description {
+    font-size: 1.5rem;
+    text-align: center;
+    margin: 20px 20px;
+}
