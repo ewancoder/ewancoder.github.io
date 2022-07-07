@@ -11,8 +11,14 @@ function loadArticlePreviews(latestArticlesElement) {
 
 function loadArticlePreview(latestArticlesElement, content) {
     const articlePreview = document.createElement('div');
-    articlePreview.classList.add('article-preview');
+    articlePreview.classList.add('article-content');
+    articlePreview.classList.add('hvr-reveal');
+    articlePreview.classList.add('hvr-grow-rotate');
     articlePreview.innerHTML = marked.parse(content);
 
-    latestArticlesElement.appendChild(articlePreview);
+    const articlePreviewBox = document.createElement('div');
+    articlePreviewBox.classList.add('article-preview');
+    articlePreviewBox.appendChild(articlePreview);
+
+    latestArticlesElement.appendChild(articlePreviewBox);
 }
