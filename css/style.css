@@ -18,6 +18,8 @@ body {
 }
 
 .article-preview {
-    background-color: #aaa;
+    background-color: #fafafa;
     padding: 0 20px;
+    max-width: 1000px;
+    margin: 0 auto;
 }
