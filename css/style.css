@@ -9,12 +9,12 @@ body {
 #summary {
     font-size: 2rem;
     text-align: center;
-    margin: 60px 0;
+    margin: 60px 0 20px 0;
 }
 
 #description {
     text-align: center;
-    margin: 20px 20px;
+    margin: 20px 20px 50px 20px;
 }
 
 .article-preview {
