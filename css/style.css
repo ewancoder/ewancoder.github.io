@@ -43,6 +43,11 @@ body {
     overflow: hidden;
 }
 
+.no-decoration {
+    color: inherit;
+    text-decoration: none;
+}
+
 .fade-in {
     animation: fadeIn 0.5s;
 }

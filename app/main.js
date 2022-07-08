@@ -13,7 +13,7 @@ const latestArticlesElement = document.getElementById('latest-articles');
 
 (async function () {
     if (path && path.startsWith('/articles/')) {
-        await reloadArticleByPath(path);
+        await reloadArticleByPathAsync(path);
     } else {
         await reloadMainPage();
     }
@@ -24,10 +24,16 @@ async function reloadMainPage() {
     await loadAllArticlesAsync();
 }
 
-async function reloadArticleByPath(path) {
+function reloadArticleByPathAsync(path) {
     latestArticlesElement.innerHTML = '';
 
-    const content = await loadMarkdownArticleAsync(path.split('/articles/')[1]);
+    return reloadArticleByNameAsync(path.split('/articles/')[1]);
+}
+
+async function reloadArticleByNameAsync(articleName) {
+    latestArticlesElement.innerHTML = '';
+
+    const content = await loadMarkdownArticleAsync(articleName);
 
     loadFullArticle(latestArticlesElement, content);
 }
@@ -45,13 +51,21 @@ async function loadAllArticlesAsync() {
                 .join('\n');
         }
 
-        loadArticlePreview(latestArticlesElement, content);
+        loadArticlePreview(latestArticlesElement, content, articleName);
 
         await new Promise(x => setTimeout(x, 100));
     }
 }
 
-function loadArticlePreview(latestArticlesElement, content) {
+function loadArticlePreview(latestArticlesElement, content, articleName) {
+    const articleLink = document.createElement('a');
+    articleLink.classList.add('no-decoration');
+    articleLink.setAttribute('href', `/#/articles/${articleName}`);
+
+    articleLink.onclick = function() {
+        reloadArticleByNameAsync(articleName);
+    };
+
     const articlePreview = document.createElement('div');
     articlePreview.classList.add('article-content');
     articlePreview.classList.add('hvr-reveal');
@@ -63,7 +77,9 @@ function loadArticlePreview(latestArticlesElement, content) {
     articlePreviewBox.classList.add('article-preview');
     articlePreviewBox.appendChild(articlePreview);
 
-    latestArticlesElement.appendChild(articlePreviewBox);
+    articleLink.appendChild(articlePreviewBox);
+
+    latestArticlesElement.appendChild(articleLink);
 }
 
 function loadFullArticle(latestArticlesElement, content) {
