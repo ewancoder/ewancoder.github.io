@@ -30,3 +30,19 @@ body {
     margin: 0 auto;
     width: 100%;
 }
+
+.fade-in {
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        top: 100px;
+    }
+
+    100% {
+        opacity: 1;
+        top: 0px;
+    }
+}

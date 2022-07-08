@@ -22,6 +22,8 @@ async function loadAllArticlesAsync() {
         }
 
         loadArticlePreview(latestArticlesElement, content);
+
+        await new Promise(x => setTimeout(x, 100));
     }
 }
 
@@ -30,6 +32,7 @@ function loadArticlePreview(latestArticlesElement, content) {
     articlePreview.classList.add('article-content');
     articlePreview.classList.add('hvr-reveal');
     articlePreview.classList.add('hvr-grow-rotate');
+    articlePreview.classList.add('fade-in');
     articlePreview.innerHTML = marked.parse(content);
 
     const articlePreviewBox = document.createElement('div');
