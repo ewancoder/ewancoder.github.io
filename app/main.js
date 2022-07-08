@@ -1,9 +1,7 @@
-const href = window.location.href;
-const hrefParts = href.split('#');
-let path = undefined;
-if (hrefParts.length > 1) {
-    path = hrefParts[1];
-}
+window.onhashchange = function () 
+{
+    refreshPageAsync();
+};
 
 const articles = [
     'first-article',
@@ -11,13 +9,21 @@ const articles = [
 ]
 const latestArticlesElement = document.getElementById('latest-articles');
 
-(async function () {
+async function refreshPageAsync() {
+    const href = window.location.href;
+    const hrefParts = href.split('#');
+    let path = undefined;
+    if (hrefParts.length > 1) {
+        path = hrefParts[1];
+    }
+
     if (path && path.startsWith('/articles/')) {
         await reloadArticleByPathAsync(path);
     } else {
         await reloadMainPage();
     }
-})();
+};
+refreshPageAsync();
 
 async function reloadMainPage() {
     latestArticlesElement.innerHTML = '';
@@ -61,10 +67,6 @@ function loadArticlePreview(latestArticlesElement, content, articleName) {
     const articleLink = document.createElement('a');
     articleLink.classList.add('no-decoration');
     articleLink.setAttribute('href', `/#/articles/${articleName}`);
-
-    articleLink.onclick = function() {
-        reloadArticleByNameAsync(articleName);
-    };
 
     const articlePreview = document.createElement('div');
     articlePreview.classList.add('article-content');
