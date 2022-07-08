@@ -1,3 +1,10 @@
+const href = window.location.href;
+const hrefParts = href.split('#');
+let path = undefined;
+if (hrefParts.length > 1) {
+    path = hrefParts[1];
+}
+
 const articles = [
     'first-article',
     'second-article'
@@ -5,8 +12,25 @@ const articles = [
 const latestArticlesElement = document.getElementById('latest-articles');
 
 (async function () {
-    await loadAllArticlesAsync();
+    if (path && path.startsWith('/articles/')) {
+        await reloadArticleByPath(path);
+    } else {
+        await reloadMainPage();
+    }
 })();
+
+async function reloadMainPage() {
+    latestArticlesElement.innerHTML = '';
+    await loadAllArticlesAsync();
+}
+
+async function reloadArticleByPath(path) {
+    latestArticlesElement.innerHTML = '';
+
+    const content = await loadMarkdownArticleAsync(path.split('/articles/')[1]);
+
+    loadFullArticle(latestArticlesElement, content);
+}
 
 async function loadAllArticlesAsync() {
     for (const articleName of articles) {
@@ -40,6 +64,19 @@ function loadArticlePreview(latestArticlesElement, content) {
     articlePreviewBox.appendChild(articlePreview);
 
     latestArticlesElement.appendChild(articlePreviewBox);
+}
+
+function loadFullArticle(latestArticlesElement, content) {
+    const articlePreview = document.createElement('div');
+    articlePreview.classList.add('article-content');
+    articlePreview.classList.add('open-article');
+    articlePreview.innerHTML = marked.parse(content);
+
+    const fullArticleBox = document.createElement('div');
+    fullArticleBox.classList.add('full-article');
+    fullArticleBox.appendChild(articlePreview);
+
+    latestArticlesElement.appendChild(fullArticleBox);
 }
 
 async function loadMarkdownArticleAsync(articleName) {

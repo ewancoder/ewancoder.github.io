@@ -18,21 +18,37 @@ body {
 }
 
 .article-preview {
-    font-family: 'Lora', serif;
     margin: 30px auto;
     max-width: 1000px;
     cursor: pointer;
 }
 
+.full-article {
+    margin: 30px auto;
+    max-width: 1300px;
+}
+
 .article-content {
+    display: inline-block;
+    font-family: 'Lora', serif;
     background-color: #fafafa;
     padding: 0 20px;
     margin: 0 auto;
     width: 100%;
+
+    display: inline-block;
+    vertical-align: middle;
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    position: relative;
+    overflow: hidden;
 }
 
 .fade-in {
     animation: fadeIn 0.5s;
+}
+
+.open-article {
+    animation: openArticle 0.5s;
 }
 
 @keyframes fadeIn {
@@ -44,5 +60,17 @@ body {
     100% {
         opacity: 1;
         top: 0px;
+    }
+}
+
+@keyframes openArticle {
+    0% {
+        opacity: 0;
+        right: 100px;
+    }
+
+    100% {
+        opacity: 1;
+        right: 0px;
     }
 }
