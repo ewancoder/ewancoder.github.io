@@ -1,12 +1,18 @@
-(async function () {
-    const latestArticlesElement = document.getElementById('latest-articles');
+const articles = [
+    'first-article',
+    'second-article'
+]
+const latestArticlesElement = document.getElementById('latest-articles');
 
-    loadArticlePreviews(latestArticlesElement);
+(async function () {
+    await loadAllArticlesAsync();
 })();
 
-function loadArticlePreviews(latestArticlesElement) {
-    loadArticlePreview(latestArticlesElement, '## First article\nPlaceholder for the first article.');
-    loadArticlePreview(latestArticlesElement, '## Second article\nPlaceholder for the second article.');
+async function loadAllArticlesAsync() {
+    for (const articleName of articles) {
+        const content = await loadMarkdownArticleAsync(articleName);
+        loadArticlePreview(latestArticlesElement, content);
+    }
 }
 
 function loadArticlePreview(latestArticlesElement, content) {
@@ -21,4 +27,9 @@ function loadArticlePreview(latestArticlesElement, content) {
     articlePreviewBox.appendChild(articlePreview);
 
     latestArticlesElement.appendChild(articlePreviewBox);
+}
+
+async function loadMarkdownArticleAsync(articleName) {
+    const response = await fetch(`/articles/${articleName}.md`);
+    return await response.text();
 }
