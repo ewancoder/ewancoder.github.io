@@ -20,8 +20,8 @@ First of all, let's discuss the hardware. I have:
 
 By a lot, I mean A LOT.
 
-![USB hub](articles/hub.jpg)
-![PC backside](articles/backside.jpg)
+![USB hub](hub.jpg)
+![PC backside](backside.jpg)
 
 I am a simracer and I have a lot of equipment running off USB ports at the same time. Most of the time I simrace in VR, which includes VR headset and its sensors which are also inserted into USB ports and use a lot of throughput. Actually I can't insert all my devices directly into the mobo, I need to use some kind of USB hub. Let's list all the USB devices here:
 
@@ -60,7 +60,7 @@ My first thought was the mouse. At that time I didn't notice that some of the ke
 
 I have a completely programmable keyboard with non-trivial firmware: Ultimate Hacking Keyboard (UHK) v1.
 
-![Ultimate Hacking Keyboard](articles/uhk.jpg)
+![Ultimate Hacking Keyboard](uhk.jpg)
 
 First thing I noticed when I tried to understand the root cause of this issue - when I disconnect the keyboard, it seems to go away. When I reconnect it however - it didn't appear again. Sometimes it did, but very rarely, most often disconnecting and re-connecting keyboard solved the issue. Another issue that I noticed straight away - apart from mouse teleporting when I was using my wireless mouse, my trackpoint module (red pimple on the right side of the keyboard) was also teleporting from time to time when I was using it. I decided that these issues are the same issue in their essence, so I naturally went to UHK github and posted [an issue](https://github.com/UltimateHackingKeyboard/firmware/issues/403).
 
@@ -87,7 +87,7 @@ Like I said, it was very difficult to reproduce, and whenever you moved somethin
 
 By that time I was out of ideas. So I'm using all devices off USB 3.0 ports only, directly from PC, only keyboard and wire mouse is connected, and sometimes I'm still having these stuttering issues. I've read a lot of forums and suggestions. I found one thread describing a similar use case, where the solution was to disable energy saving on all USB controllers in Device Manager, so that OS cannot switch them off when they are inactive. The idea is to disable that tick that says "Allow the computer to turn off this device to save power".
 
-![Root hub settings](articles/root-hub.jpg)
+![Root hub settings](root-hub.jpg)
 
 So I went into Device Manager, and I saw something very strange. At that time, a lot of devices were connected to my PC, and I saw Device Manager screen flickering and updating very often, once per 1-2 seconds. When I disconnected some of the devices, the flickering stopped. So I thought: maybe Windows 10 is constantly trying to disable some of the devices because there's so many of them. After unchecking all the checkboxes, the flickering stopped. I also went into Power settings and switched everything to max pefrormance & min saving mode, just in case. This seemed to work for a while, until the issue repeated again. I was completely befuddled.
 
@@ -99,7 +99,7 @@ I was out of ideas again. By this time I started to think that my motherboard is
 
 After another thorough search, I stumbled upon a thread that said that some custom sound cards might cause issues with USB. Bingo, I thought. I have a custom sound card with ASIO capabilities to be able to play my digital piano and hear good sound using VST plugins, all that without (with negligible) delay. ASIO allows this delay to be a mere 4 ms instead of USB delay of half a second, by passing the signal on the driver level to the sound card directly, bypassing the OS and USB driver overhead constraints. I tried disabling the card, and again it seemed that everything was good now, but I lost all faith by then. I was just waiting and waiting for the issue to repeat itself. And when I almost believed that I had finally fixed it - the issue had repeated itself again.
 
-![Sound card](articles/soundcard.jpg)
+![Sound card](soundcard.jpg)
 
 ### Faulty what?
 
@@ -109,7 +109,7 @@ After a long time, I found the root cause accidentally.
 
 I have a wireless headphones connected to the PC using USB-C port on the front of the PC case, that is connected to the mobo USB-C pin. I noticed that when I play the video on YouTube, or produce any other sounds in the system, mouse cursor starts to stutter. When the sound dies, or I pause the video - the mouse cursor starts to work again. If I switch audio device to something else - everything is working flawlessly. When I switch back to the wireless headphones - it stutters again. I tried removing the receiver from USB-C port - stuttering ended. So, I thought, I found the root cause! Finally! It was all because of USB-C receiver! Either headphones create so much USB traffic that it somehow interferes with the mouse, or my USB-C connector on the motherboard is faulty and causing these issues.
 
-![USB-C port](articles/usbc.jpg)
+![USB-C port](usbc.jpg)
 
 I tried to reproduce it couple more times, it was perfectly reproducible. Eureka!
 

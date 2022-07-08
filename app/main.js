@@ -4,8 +4,8 @@ window.onhashchange = function ()
 };
 
 const articles = [
-    'first-article',
-    'second-article'
+    'dvorak/dvorak',
+    'stuttering-issue/stuttering-issue'
 ]
 const latestArticlesElement = document.getElementById('latest-articles');
 
@@ -41,7 +41,7 @@ async function reloadArticleByNameAsync(articleName) {
 
     const content = await loadMarkdownArticleAsync(articleName);
 
-    loadFullArticle(latestArticlesElement, content);
+    loadFullArticle(latestArticlesElement, content, articleName);
 }
 
 async function loadAllArticlesAsync() {
@@ -73,7 +73,8 @@ function loadArticlePreview(latestArticlesElement, content, articleName) {
     articlePreview.classList.add('hvr-reveal');
     articlePreview.classList.add('hvr-grow-rotate');
     articlePreview.classList.add('fade-in');
-    articlePreview.innerHTML = marked.parse(content);
+
+    articlePreview.innerHTML = convertMarkdownToHtml(content, articleName);
 
     const articlePreviewBox = document.createElement('div');
     articlePreviewBox.classList.add('article-preview');
@@ -84,11 +85,11 @@ function loadArticlePreview(latestArticlesElement, content, articleName) {
     latestArticlesElement.appendChild(articleLink);
 }
 
-function loadFullArticle(latestArticlesElement, content) {
+function loadFullArticle(latestArticlesElement, content, articlePath) {
     const articlePreview = document.createElement('div');
     articlePreview.classList.add('article-content');
     articlePreview.classList.add('open-article');
-    articlePreview.innerHTML = marked.parse(content);
+    articlePreview.innerHTML = convertMarkdownToHtml(content, articlePath);
 
     const fullArticleBox = document.createElement('div');
     fullArticleBox.classList.add('full-article');
@@ -100,4 +101,15 @@ function loadFullArticle(latestArticlesElement, content) {
 async function loadMarkdownArticleAsync(articleName) {
     const response = await fetch(`/articles/${articleName}.md`);
     return await response.text();
+}
+
+function convertMarkdownToHtml(markdownContent, articlePath) {
+    let baseUrl = articlePath.substring(0, articlePath.lastIndexOf('/'));
+    if (baseUrl) {
+        baseUrl = `articles/${baseUrl}/`;
+    } else {
+        baseUrl = 'articles/';
+    }
+
+    return marked.parse(markdownContent, { baseUrl });
 }
