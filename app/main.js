@@ -10,7 +10,17 @@ const latestArticlesElement = document.getElementById('latest-articles');
 
 async function loadAllArticlesAsync() {
     for (const articleName of articles) {
-        const content = await loadMarkdownArticleAsync(articleName);
+        let content = await loadMarkdownArticleAsync(articleName);
+
+        const lines = content.split('\n');
+
+        if (lines.length > 5) {
+            content = lines
+                .slice(0, 5)
+                .concat(['', '...'])
+                .join('\n');
+        }
+
         loadArticlePreview(latestArticlesElement, content);
     }
 }
