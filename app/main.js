@@ -1,4 +1,4 @@
-window.onhashchange = function () 
+window.onhashchange = function ()
 {
     refreshPageAsync();
 };
