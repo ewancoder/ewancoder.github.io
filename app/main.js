@@ -3,12 +3,16 @@ window.onhashchange = function ()
     refreshPageAsync();
 };
 
+let currentArticlePath = undefined;
+
 const addAnchorLinksClickEvents = () => {
     document.querySelectorAll('.anchor-link').forEach(el => {
         el.addEventListener('click', () => {
+            const id = el.id.split('-')[1];
+            window.location.hash = `${currentArticlePath}#${id}`;
             const target = document.getElementById(el.id.split('-')[1]);
             target && target.scrollIntoView({
-                behavior: "smooth"
+                behavior: 'smooth'
             });
         });
     });
@@ -28,12 +32,28 @@ async function refreshPageAsync() {
         path = hrefParts[1];
     }
 
+    anchor = hrefParts[2];
+
     if (path && path.startsWith('/articles/')) {
-        await reloadArticleByPathAsync(path);
+        if (currentArticlePath != path) {
+            await reloadArticleByPathAsync(path);
+            addAnchorLinksClickEvents();
+        }
+
+        currentArticlePath = path;
+
+        if (anchor) {
+            const headerElement = document.querySelector(`#${anchor}`);
+            await new Promise(x => setTimeout(x, 100));
+            headerElement && headerElement.scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
     } else {
         await reloadMainPage();
+
+        currentArticlePath = undefined;
     }
-    addAnchorLinksClickEvents();
 };
 refreshPageAsync();
 
@@ -102,6 +122,18 @@ function loadFullArticle(latestArticlesElement, content, articlePath) {
     articlePreview.classList.add('article-content');
     articlePreview.classList.add('open-article');
     articlePreview.innerHTML = convertMarkdownToHtml(content, articlePath);
+
+    articlePreview.querySelectorAll('h3').forEach(header => {
+        const value = header.innerHTML;
+        const id = header.getAttribute('id');
+
+        const linkElement = document.createElement('a');
+        linkElement.setAttribute('href', `#/articles/${articlePath}#${id}`);
+        linkElement.innerHTML = value;
+
+        header.innerHTML = '';
+        header.appendChild(linkElement);
+    });
 
     const fullArticleBox = document.createElement('div');
     fullArticleBox.classList.add('full-article');
