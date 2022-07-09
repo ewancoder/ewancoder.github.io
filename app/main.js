@@ -7,11 +7,10 @@ const addAnchorLinksClickEvents = () => {
     document.querySelectorAll('.anchor-link').forEach(el => {
         el.addEventListener('click', () => {
             const target = document.getElementById(el.id.split('-')[1]);
-            target && target.scrollIntoView({ 
+            target && target.scrollIntoView({
                     behavior: "smooth",
                     block: "start"
                 });
-               
         })
     })
 }
