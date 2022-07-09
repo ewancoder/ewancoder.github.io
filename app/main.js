@@ -8,12 +8,11 @@ const addAnchorLinksClickEvents = () => {
         el.addEventListener('click', () => {
             const target = document.getElementById(el.id.split('-')[1]);
             target && target.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start"
-                });
-        })
-    })
-}
+                behavior: "smooth"
+            });
+        });
+    });
+};
 
 const articles = [
     'dvorak/dvorak',
