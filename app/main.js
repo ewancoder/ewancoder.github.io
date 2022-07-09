@@ -10,10 +10,6 @@ const addAnchorLinksClickEvents = () => {
         el.addEventListener('click', () => {
             const id = el.id.split('-')[1];
             window.location.hash = `${currentArticlePath}#${id}`;
-            const target = document.getElementById(el.id.split('-')[1]);
-            target && target.scrollIntoView({
-                behavior: 'smooth'
-            });
         });
     });
 };
