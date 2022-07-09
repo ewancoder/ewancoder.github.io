@@ -4,12 +4,16 @@ window.onhashchange = function ()
 };
 
 let currentArticlePath = undefined;
+let anchor = undefined;
 
 const addAnchorLinksClickEvents = () => {
     document.querySelectorAll('.anchor-link').forEach(el => {
         el.addEventListener('click', () => {
             const id = el.id.split('-')[1];
             window.location.hash = `${currentArticlePath}#${id}`;
+
+            anchor = id;
+            scrollToAnchorAsync(anchor);
         });
     });
 };
@@ -39,11 +43,7 @@ async function refreshPageAsync() {
         currentArticlePath = path;
 
         if (anchor) {
-            const headerElement = document.querySelector(`#${anchor}`);
-            await new Promise(x => setTimeout(x, 100));
-            headerElement && headerElement.scrollIntoView({
-                behavior: 'smooth'
-            });
+            await scrollToAnchorAsync(anchor);
         }
     } else {
         await reloadMainPage();
@@ -52,6 +52,14 @@ async function refreshPageAsync() {
     }
 };
 refreshPageAsync();
+
+async function scrollToAnchorAsync(anchor) {
+    const headerElement = document.querySelector(`#${anchor}`);
+    await new Promise(x => setTimeout(x, 100));
+    headerElement && headerElement.scrollIntoView({
+        behavior: 'smooth'
+    });
+}
 
 async function reloadMainPage() {
     latestArticlesElement.innerHTML = '';
