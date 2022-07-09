@@ -94,6 +94,7 @@ async function loadAllArticlesAsync() {
 function loadArticlePreview(latestArticlesElement, content, articleName) {
     const articleLink = document.createElement('a');
     articleLink.classList.add('no-decoration');
+    articleLink.classList.add('block');
     articleLink.setAttribute('href', `/#/articles/${articleName}`);
 
     const articlePreview = document.createElement('div');
@@ -125,6 +126,7 @@ function loadFullArticle(latestArticlesElement, content, articlePath) {
 
         const linkElement = document.createElement('a');
         linkElement.setAttribute('href', `#/articles/${articlePath}#${id}`);
+        linkElement.classList.add('no-decoration');
         linkElement.innerHTML = value;
 
         header.innerHTML = '';
