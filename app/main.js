@@ -3,17 +3,17 @@ window.onhashchange = function ()
     refreshPageAsync();
 };
 
-window.onload = () => {
-    setTimeout(() => {
-        const scrollEl = document.getElementById('scroll');
-        scrollEl.addEventListener('click', () => {
-            document.getElementById('conclusion')
-                .scrollIntoView({ 
+const addAnchorLinksClickEvents = () => {
+    document.querySelectorAll('.anchor-link').forEach(el => {
+        el.addEventListener('click', () => {
+            const target = document.getElementById(el.id.split('-')[1]);
+            target && target.scrollIntoView({ 
                     behavior: "smooth",
                     block: "start"
                 });
+               
         })
-    }, 500)    
+    })
 }
 
 const articles = [
@@ -35,6 +35,7 @@ async function refreshPageAsync() {
     } else {
         await reloadMainPage();
     }
+    addAnchorLinksClickEvents();
 };
 refreshPageAsync();
 

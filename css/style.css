@@ -71,6 +71,12 @@ body {
     animation: openArticle 0.5s;
 }
 
+.anchor-link {
+    color: #0000ee; 
+    cursor: pointer; 
+    text-decoration: underline;
+}
+
 @keyframes fadeIn {
     0% {
         opacity: 0;
