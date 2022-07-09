@@ -50,7 +50,7 @@ At some random point during the day, my mouse started to stutter and freeze, sud
 
 The thing is - I am a simracer, I drive virtual races in virtual cars with real people. Some of the races are team races, where you need to drive for over 2 hours straight. Imagine what would happen if during a race, my wheel or pedal input became suddenly stuttery, going in jagged pulses instead of smooth application! I would spin, I would crash and most horribly I could ruin someone else's race. It would not do. I couldn't tolerate such freezes, I needed to find the solution.
 
-To be fair, I'm still not 100% sure that I resolved this issue. In short, currently I am limiting the amount of USB devices connected to my PC at a time, and trying to connect most important equipment directly to the MOBO, using only USB 3.0 ports. I don't have the guarantee that it would always work though, but so far it had. If you want to know the possible sources of this issue and how I "fixed" it, you can scroll to the **Conclusion** section. Otherwise, be prepared for a long read.
+To be fair, I'm still not 100% sure that I resolved this issue. In short, currently I am limiting the amount of USB devices connected to my PC at a time, and trying to connect most important equipment directly to the MOBO, using only USB 3.0 ports. I don't have the guarantee that it would always work though, but so far it had. If you want to know the possible sources of this issue and how I "fixed" it, you can <a class="anchor-link" id="anchor-conclusion"> scroll</a> to the **Conclusion** section. Otherwise, be prepared for a long read.
 
 ### Faulty mouse
 

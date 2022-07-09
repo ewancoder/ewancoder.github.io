@@ -3,6 +3,19 @@ window.onhashchange = function ()
     refreshPageAsync();
 };
 
+const addAnchorLinksClickEvents = () => {
+    document.querySelectorAll('.anchor-link').forEach(el => {
+        el.addEventListener('click', () => {
+            const target = document.getElementById(el.id.split('-')[1]);
+            target && target.scrollIntoView({ 
+                    behavior: "smooth",
+                    block: "start"
+                });
+               
+        })
+    })
+}
+
 const articles = [
     'dvorak/dvorak',
     'stuttering-issue/stuttering-issue'
@@ -22,6 +35,7 @@ async function refreshPageAsync() {
     } else {
         await reloadMainPage();
     }
+    addAnchorLinksClickEvents();
 };
 refreshPageAsync();
 
