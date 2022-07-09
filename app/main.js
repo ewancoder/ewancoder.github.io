@@ -128,7 +128,7 @@ function loadFullArticle(latestArticlesElement, content, articlePath) {
     articlePreview.classList.add('open-article');
     articlePreview.innerHTML = convertMarkdownToHtml(content, articlePath);
 
-    articlePreview.querySelectorAll('h3').forEach(header => {
+    articlePreview.querySelectorAll('h2, h3, h4, h5, h6').forEach(header => {
         const value = header.innerHTML;
         const id = header.getAttribute('id');
 
