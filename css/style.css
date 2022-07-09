@@ -43,6 +43,16 @@ body {
     overflow: hidden;
 }
 
+blockquote {
+    font-size: 1.2rem;
+}
+
+code {
+    background-color: #fda;
+    padding: 0 7px;
+    font-family: monospace;
+}
+
 .no-decoration {
     color: inherit;
     text-decoration: none;
