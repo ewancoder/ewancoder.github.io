@@ -3,6 +3,19 @@ window.onhashchange = function ()
     refreshPageAsync();
 };
 
+window.onload = () => {
+    setTimeout(() => {
+        const scrollEl = document.getElementById('scroll');
+        scrollEl.addEventListener('click', () => {
+            document.getElementById('conclusion')
+                .scrollIntoView({ 
+                    behavior: "smooth",
+                    block: "start"
+                });
+        })
+    }, 500)    
+}
+
 const articles = [
     'dvorak/dvorak',
     'stuttering-issue/stuttering-issue'
