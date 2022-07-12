@@ -15,6 +15,44 @@ blockquote {
     text-align: center;
 }
 
+#menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 100px;
+    row-gap: 20px;
+    flex-wrap: wrap;
+}
+
+#menu a {
+    width: 300px;
+}
+
+#menu a img {
+    height: 200px;
+}
+
+.menu-item {
+    color: inherit;
+    text-decoration: none;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.menu-item h1 {
+    margin: 5px auto;
+    height: 100px;
+}
+
+.menu-item p {
+    margin: 5px auto;
+    height: 100px;
+}
+
 .article-preview {
     margin: 30px auto;
     max-width: 1000px;
