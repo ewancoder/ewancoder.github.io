@@ -107,8 +107,7 @@ function loadArticlePreview(latestArticlesElement, content, articleName) {
 
     const articlePreview = document.createElement('div');
     articlePreview.classList.add('article-content');
-    articlePreview.classList.add('hvr-reveal');
-    articlePreview.classList.add('hvr-grow-rotate');
+    articlePreview.classList.add('hvr-article-preview');
     articlePreview.classList.add('fade-in');
 
     articlePreview.innerHTML = convertMarkdownToHtml(content, articleName);
