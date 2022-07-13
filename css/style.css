@@ -102,10 +102,6 @@ code {
     align-items: center;
 }
 
-#router p {
-    text-align: center;
-}
-
 #icons {
     display: flex;
     justify-content: center;
