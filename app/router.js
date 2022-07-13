@@ -21,7 +21,7 @@ async function processRoutingAsync() {
     const path = hrefParts[1];
     currentAnchor = hrefParts[2];
 
-    if (currentPath == path) {
+    if (currentPath && currentPath == path) {
         // If the anchor is not empty - we need to scroll to it.
         currentAnchor && await scrollToAnchorAsync();
 
