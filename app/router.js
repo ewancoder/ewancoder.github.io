@@ -61,6 +61,30 @@ async function refreshPageAsync() {
         return;
     }
 
+    if (currentPath.startsWith('/dev')) {
+        const p = document.createElement('p');
+        p.innerHTML = 'I am a .NET backend developer. During years of programming I stumbled upon nontrivial problems that a lot of people stumble upon, but that are not easy to solve without prior experience. Here I\'m sharing all this knowledge as a set of themed articles.';
+
+        routerElement.appendChild(p);
+        return;
+    }
+
+    if (currentPath.startsWith('/simracing')) {
+        const p = document.createElement('p');
+        p.innerHTML = 'Apart from programming I am sim racing - racing virtual cars on virtual tracks with real people. The tracks are laser-scanned and the physics is simulated, so it\'s not an easy thing. But I\'m learning and driving faster with each passing day.';
+
+        routerElement.appendChild(p);
+        return;
+    }
+
+    if (currentPath.startsWith('/projects')) {
+        const p = document.createElement('p');
+        p.innerHTML = 'Here I\'ll add a list of my projects, both personal ones and the descriptions of those I worked on during the years. One of the personal projects is TypingRealm - a tool & game to help learn touchtyping. It\s a network game and involves a bunch of concurrency concerns.';
+
+        routerElement.appendChild(p);
+        return;
+    }
+
     // Load main page if route contains unknown path.
     await mainpage.refreshPageAsync(routerElement, currentPath);
 }
