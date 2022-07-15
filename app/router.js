@@ -1,5 +1,6 @@
 import * as mainpage from './mainpage.js';
 import * as articles from './articles/articles.js';
+import * as dev from './dev/dev.js';
 
 const routerElement = document.getElementById('router');
 
@@ -66,6 +67,8 @@ async function refreshPageAsync() {
         p.innerHTML = 'I am a .NET backend developer. During years of programming I stumbled upon nontrivial problems that a lot of people stumble upon, but that are not easy to solve without prior experience. Here I\'m sharing all this knowledge as a set of themed articles.';
 
         routerElement.appendChild(p);
+
+        await dev.refreshPageAsync(routerElement, currentPath);
         return;
     }
 
