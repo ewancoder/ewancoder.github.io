@@ -1,4 +1,6 @@
 function articleFactory(prefix, articles) {
+    const contentPrefix = `content/${prefix}`;
+
     return ({
         refreshPageAsync
     });
@@ -40,7 +42,7 @@ function articleFactory(prefix, articles) {
     }
 
     async function loadMarkdownArticleAsync(articleName) {
-        const response = await fetch(`/${prefix}/${articleName}.md`);
+        const response = await fetch(`/${contentPrefix}/${articleName}.md`);
         return await response.text();
     }
 
@@ -95,9 +97,9 @@ function articleFactory(prefix, articles) {
     function convertMarkdownToHtml(markdownContent, articlePath) {
         let baseUrl = articlePath.substring(0, articlePath.lastIndexOf('/'));
         if (baseUrl) {
-            baseUrl = `${prefix}/${baseUrl}/`;
+            baseUrl = `${contentPrefix}/${baseUrl}/`;
         } else {
-            baseUrl = `${prefix}/`;
+            baseUrl = `${contentPrefix}/`;
         }
 
         return marked.parse(markdownContent, { baseUrl });
