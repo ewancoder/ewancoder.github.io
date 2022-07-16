@@ -115,7 +115,12 @@ blockquote {
 
 code {
     background-color: #fda;
+    padding: 0 7px;
     font-family: monospace;
+}
+
+pre code {
+    padding: 0;
 }
 
 .no-decoration {
