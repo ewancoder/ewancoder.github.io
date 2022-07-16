@@ -57,7 +57,7 @@ function articleFactory(prefix, articles) {
         articlePreview.classList.add('hvr-article-preview');
         articlePreview.classList.add('fade-in');
 
-        articlePreview.innerHTML = convertMarkdownToHtml(content, articleName);
+        articlePreview.innerHTML = convertMarkdownToHtml(content, articleName, true);
 
         const articlePreviewBox = document.createElement('div');
         articlePreviewBox.classList.add('article-preview');
@@ -72,20 +72,7 @@ function articleFactory(prefix, articles) {
         const articlePreview = document.createElement('div');
         articlePreview.classList.add('article-content');
         articlePreview.classList.add('open-article');
-        articlePreview.innerHTML = convertMarkdownToHtml(content, articlePath);
-
-        articlePreview.querySelectorAll('h2, h3, h4, h5, h6').forEach(header => {
-            const value = header.innerHTML;
-            const id = header.getAttribute('id');
-
-            const linkElement = document.createElement('a');
-            linkElement.setAttribute('href', `#/${prefix}/${articlePath}#${id}`);
-            linkElement.classList.add('no-decoration');
-            linkElement.innerHTML = value;
-
-            header.innerHTML = '';
-            header.appendChild(linkElement);
-        });
+        articlePreview.innerHTML = convertMarkdownToHtml(content, articlePath, false);
 
         const fullArticleBox = document.createElement('div');
         fullArticleBox.classList.add('full-article');
@@ -94,7 +81,7 @@ function articleFactory(prefix, articles) {
         latestArticlesElement.appendChild(fullArticleBox);
     }
 
-    function convertMarkdownToHtml(markdownContent, articlePath) {
+    function convertMarkdownToHtml(markdownContent, articlePath, isPreview) {
         let baseUrl = articlePath.substring(0, articlePath.lastIndexOf('/'));
         if (baseUrl) {
             baseUrl = `${contentPrefix}/${baseUrl}/`;
@@ -102,7 +89,51 @@ function articleFactory(prefix, articles) {
             baseUrl = `${contentPrefix}/`;
         }
 
-        return marked.parse(markdownContent, { baseUrl });
+        const renderer = new marked.Renderer();
+        const toc = [];
+
+        renderer.heading = function(text, level, raw) {
+            const id = this.options.headerPrefix + raw.toLowerCase().replace(/[^\w]+/g, '-');
+            const aElement = `<a class="no-decoration" href="#/${prefix}/${articlePath}#${id}">${text}</a>`;
+            const tocEntry = `<a class="no-decoration toc-item toc${level}" href="#/${prefix}/${articlePath}#${id}">${text}</a>`;
+            const hElement = `<h${level} id="${id}">${aElement}</h${level}>`;
+
+            toc.push({
+                id: id,
+                level: level,
+                text: text,
+                aElement: aElement,
+                hElement: hElement,
+                tocEntry: tocEntry
+            });
+
+            return hElement + '\n';
+        };
+
+        marked.setOptions({
+            renderer: renderer,
+            baseUrl: baseUrl
+        });
+
+        let content = marked.parse(markdownContent);
+        const tocContent = `<div class="toc">${generateToc(toc)}</div>`
+
+        if (isPreview) {
+            content = content.replace('<p>[TOC]</p>', '');
+        } else {
+            content = content.replace('<p>[TOC]</p>', tocContent);
+        }
+
+        return content;
+    }
+
+    function generateToc(toc) {
+        let tocContent = '';
+        for (let heading of toc) {
+            tocContent += heading.tocEntry + '\n';
+        }
+
+        return tocContent;
     }
 }
 

@@ -15,6 +15,40 @@ blockquote {
     text-align: center;
 }
 
+.toc {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    background-color: #eef;
+}
+
+.toc-item {
+    font-size: 1.5rem;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.toc-item:hover {
+    transform: scale(1.15) translateX(10px);
+}
+
+.toc2 {
+    padding-left: 20px;
+}
+
+.toc3 {
+    padding-left: 60px;
+}
+
+.toc4 {
+    padding-left: 100px;
+}
+
+.toc5 {
+    padding-left: 140px;
+}
+
 #menu {
     display: flex;
     justify-content: center;

@@ -4,6 +4,8 @@
 
 As a QWERTY touch typist, I've always wondered whether I should learn DVORAK keyboard layout. After almost three years of using it, I can highlight essential points for and against it. The short answer - you shouldn't learn it. The long one - you definitely should!
 
+[TOC]
+
 I should also say that I am an extensive VIM user, and I'm currently using Windows OS with a lot of keyboard shortcuts, I am also occasionally gaming. So DVORAK is assessed from these point of views:
 
 * Typing speed
