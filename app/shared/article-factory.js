@@ -8,11 +8,13 @@ function articleFactory(prefix, articles) {
     async function refreshPageAsync(element, path) {
         if (path == `/${prefix}`) {
             await loadMainPageAsync(element);
+            hljs.highlightAll();
             return;
         }
 
         const articleName = path.split(`/${prefix}/`)[1];
         await loadArticleAsync(element, articleName);
+        hljs.highlightAll();
     }
 
     async function loadArticleAsync(element, articleName) {
@@ -24,15 +26,6 @@ function articleFactory(prefix, articles) {
     async function loadMainPageAsync(element) {
         for (const articleName of articles) {
             let content = await loadMarkdownArticleAsync(articleName);
-
-            const lines = content.split('\n');
-
-            if (lines.length > 5) {
-                content = lines
-                    .slice(0, 5)
-                    .concat(['', '...'])
-                    .join('\n');
-            }
 
             loadArticlePreview(element, content, articleName);
 
@@ -47,6 +40,22 @@ function articleFactory(prefix, articles) {
     }
 
     function loadArticlePreview(element, content, articleName) {
+        const lines = content.split('\n');
+
+        const tocLineIndex = lines.findIndex(line => line.startsWith('[TOC]'));
+        if (tocLineIndex > -1) {
+            content = lines.slice(0, tocLineIndex)
+                .concat(['', '...'])
+                .join('\n');
+        } else if (lines.length > 5) {
+            content = lines
+                .slice(0, 5)
+                .concat(['', '...'])
+                .join('\n');
+        }
+
+        content = content.replace('[TOC]', '');
+
         const articleLink = document.createElement('a');
         articleLink.classList.add('no-decoration');
         articleLink.classList.add('block');
@@ -79,8 +88,6 @@ function articleFactory(prefix, articles) {
         fullArticleBox.appendChild(articlePreview);
 
         latestArticlesElement.appendChild(fullArticleBox);
-
-        hljs.highlightAll();
     }
 
     function convertMarkdownToHtml(markdownContent, articlePath, isPreview) {

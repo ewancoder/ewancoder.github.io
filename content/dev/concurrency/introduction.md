@@ -12,4 +12,6 @@ public sealed class A
 }
 ```
 
+[TOC]
+
 WIP.
