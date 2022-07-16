@@ -116,11 +116,17 @@ blockquote {
 code {
     background-color: #fda;
     padding: 0 7px;
+    font-size: 1.2rem;
     font-family: monospace;
 }
 
 pre code {
     padding: 0;
+    background-color: inherit;
+}
+
+pre {
+    box-shadow: 3px 3px 10px #ccc;
 }
 
 .no-decoration {

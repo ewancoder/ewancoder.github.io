@@ -79,6 +79,8 @@ function articleFactory(prefix, articles) {
         fullArticleBox.appendChild(articlePreview);
 
         latestArticlesElement.appendChild(fullArticleBox);
+
+        hljs.highlightAll();
     }
 
     function convertMarkdownToHtml(markdownContent, articlePath, isPreview) {
