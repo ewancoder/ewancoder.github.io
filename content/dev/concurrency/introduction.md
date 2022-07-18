@@ -4,7 +4,7 @@ This is a short introduction into the world of concurrency: what it is, why we n
 
 [TOC]
 
-Almost any application requires some kind of ability to run multiple tasks in parallel. when we are fetching data from database, we don't want UI to freeze, we want user to be able to click buttons and use our application. This requires two jobs running simultaneously at one time: fetching the data and drawing the UI.
+Almost any application requires some kind of ability to run multiple tasks in parallel. When we are fetching data from database, we don't want the UI to freeze, we want the user to be able to click buttons and use our application. This requires two jobs running simultaneously at one time: *fetching the data* and *drawing the UI*.
 
 **Concurrency** is the ability to run multiple processes at the same time, i.e. concurrently.
 
@@ -12,7 +12,7 @@ Concurrency has many aspects and we will discuss them in details, but first let'
 
 ### Peeling bananas on a single-core CPU
 
-> The following examples are extremely simplified so fundamental concepts of concurrency can be understood without delving into the depths of real CPU structure and operation.
+> The following examples are extremely simplified so that fundamental concepts of concurrency can be understood without delving into the depths of real CPU structure and operation.
 
 First let's discuss how single-core CPU performs operations. Simply put, single-core central processor unit (CPU) performs instructions in an orderly fashion, one by one, in a row. It cannot execute two operations simultaneously, it will always execute them one by one.
 
