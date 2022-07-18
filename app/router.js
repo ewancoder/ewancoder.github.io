@@ -18,6 +18,12 @@ function generateAnchorLinks() {
 
 async function processRoutingAsync() {
     const href = window.location.href;
+    if (href.indexOf('%23') > -1) {
+        // If loading a link with multiple '#' - we need to avoid escaping them.
+        window.location.href = href.replace('%23', '#');
+        return;
+    }
+
     const hrefParts = href.split('#');
     const path = hrefParts[1];
     currentAnchor = hrefParts[2];
