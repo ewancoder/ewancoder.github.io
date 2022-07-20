@@ -190,3 +190,5 @@ So, every time we switch between contexts, we need to save all the current ambie
 Well, hyperthreading is supported by an actual piece in the hardware - in the CPU itself. In every physical CPU core there are two storages for the current ambient context of the thread, so there's no need to erase and write another thread's context when switching to it. The information about both threads is already being stored in different context storages, which makes the process of switching between threads much faster.
 
 But nonetheless, the physical CPU core is still single one, so there's no more processing power available to you than in non-hyperthreaded CPU. So you should not schedule more highly CPU-consuming work that you have physical processes.
+
+`TODO: Add basic information on problems that we might encounter when working with concurrency.`

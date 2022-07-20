@@ -2,7 +2,8 @@ import { articleFactory } from '../shared/index.js';
 
 const prefix = 'dev';
 const articles = [
-    'concurrency/introduction'
+    'concurrency/introduction/introduction',
+    'concurrency/thread-pool/thread-pool'
 ];
 
 const refreshPageAsync = articleFactory(prefix, articles).refreshPageAsync;
