@@ -4,6 +4,8 @@ This is a short introduction into the world of concurrency: what it is, why we n
 
 [TOC]
 
+> The next article in this series is [Thread pool - concurrency in .NET](#/dev/concurrency/thread-pool/thread-pool).
+
 Almost any application requires some kind of ability to run multiple tasks in parallel. When we are fetching data from database, we don't want the UI to freeze, we want the user to be able to click buttons and use our application. This requires two jobs running simultaneously at one time: *fetching the data* and *drawing the UI*.
 
 **Concurrency** is the ability to run multiple processes at the same time, i.e. concurrently.
