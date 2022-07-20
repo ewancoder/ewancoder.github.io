@@ -164,3 +164,29 @@ However, the main question here is: how many bottles can our sink fill at the sa
 The real-world example of I/O-bound work is getting data from the database over the network. Let's imagine our network allows us to download data with the speed of 100 Mb/s (the output of the sink tap). But one request to the database only works at the speed of 10 Mb/s (the neck of each bottle). This means we can ask for as much as 10 parallel retrievals of data (to fill 10 bottles at the same time), but not more. If we ask for 20 retrievals of data, the database will give us 20 * 10 = 200 Mb/s of data, but we are able to download with the speed of only 100 Mb/s (not enough water from the sink tap). We are going to be limited by our I/O channel (network in this example). We could have received the first 10 retrievals twice faster than we would if we request all 20 of them at the same time and wait for all of them to complete.
 
 Hence, here's another important conclusion: whenever you have I/O-bound work, you need to carefully consider your I/O channel limitations and plan accordigly. You can make 1000 parallel requests to the database and it won't hinder your CPU a bit, it can even peel some bananas in the meantime, but you'll get your data much later than you would've gotten those first 10 requests had you requested just them. So think whether you need all the data at once, or you can request the data bit by bit utilizing your I/O speed to the maximum, and already use the first half of retrieved data while the second half is still loading.
+
+### Hyperthreading
+
+There are CPUs that are hyperthreaded: they have two logical cores per one physical core. For example, hyper-threaded 8-core CPU would have 16 logical cores, 2 for every physical core. How does it work? Does it mean that now we suddenly have 16 **parallel** cores that can do **parallel** operations? Can we peel 16 bananas at the same time using these 16 logical cores?
+
+Well, yes and no. Hyperthreading works in much the same way as context-switching, just on the level below, inside the CPU itself. So the CPU provides OS with information about its cores, and when a regular CPU would report that it has 8 cores, the hyperthreaded CPU reports that it has 16 cores. The OS then schedules work accordingly, and the OS doesn't care that these cores are hyperthreaded - it sends the work to these 16 cores as if they would've been physical ones. So OS thinks that it can send more work to be run in parallel. We are asking our hyper-threaded CPU to peel 16 bananas at the same time.
+
+The CPU accepts this request, but under the hood it uses some kind of **context-switching** mechanism to delegate the work to the underlying 8 physical cores. The CPU doesn't have 16 cores, it can only do 8 parallel jobs at the same time. So in order to do 16 jobs, it delegates a pair of bananas to every physical core, but for every core it switches the context between the two bananas so they can be peeled at the same rate.
+
+Why is this better than context-switching that OS does?
+
+In order for OS to switch context between Banana 1 and Banana 2, OS needs to:
+
+- Save current status of peeling Banana 1 from the status storage
+- Erase current status storage
+- Write current status of peeling Banana 2 to the status storage
+- Do a piece of work for peeling Banana 2 (this is the only step that we saw on the images above)
+- Save current status of peeling Banana 2 from the status storage
+- Erase current status storage
+- Write current status of peeling Banana 1 to the status storage
+
+So, every time we switch between contexts, we need to save all the current ambient information about Thread 1, and insert into the storage the ambient information about Thread 2. Because we only have one storage for storing thread-ambient information. This takes quite a lot of time.
+
+Well, hyperthreading is supported by an actual piece in the hardware - in the CPU itself. In every physical CPU core there are two storages for the current ambient context of the thread, so there's no need to erase and write another thread's context when switching to it. The information about both threads is already being stored in different context storages, which makes the process of switching between threads much faster.
+
+But nonetheless, the physical CPU core is still single one, so there's no more processing power available to you than in non-hyperthreaded CPU. So you should not schedule more highly CPU-consuming work that you have physical processes.
