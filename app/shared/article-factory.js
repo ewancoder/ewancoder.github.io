@@ -9,12 +9,14 @@ function articleFactory(prefix, articles) {
         if (path == `/${prefix}`) {
             await loadMainPageAsync(element);
             hljs.highlightAll();
+            hljs.initLineNumbersOnLoad();
             return;
         }
 
         const articleName = path.split(`/${prefix}/`)[1];
         await loadArticleAsync(element, articleName);
         hljs.highlightAll();
+        hljs.initLineNumbersOnLoad();
     }
 
     async function loadArticleAsync(element, articleName) {

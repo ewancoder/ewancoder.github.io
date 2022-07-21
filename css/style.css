@@ -25,6 +25,34 @@ body div {
     color: #eee;
 }
 
+.language-console .hljs-ln-numbers {
+    visibility: hidden;
+}
+
+.hljs-ln-numbers {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    text-align: center;
+    color: #ccc;
+    border-right: 1px solid #CCC;
+    vertical-align: top;
+    padding-right: 5px;
+}
+
+.hljs-ln td {
+    padding-left: 10px;
+}
+
+.hljs-ln-n {
+    margin: 0;
+    margin-right: 5px;
+}
+
 blockquote {
     font-size: 1.1rem;
 }
