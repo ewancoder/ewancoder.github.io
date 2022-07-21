@@ -75,7 +75,7 @@ public static class Logger
     {
         var threadId = Thread.CurrentThread.ManagedThreadId;
 
-        Console.WriteLine($"{threadId}: {message}");
+        Console.WriteLine($"Thread {threadId}: {message}");
     }
 }
 ```
@@ -99,13 +99,60 @@ void Work(object? state)
 Now if we run this, we are going to get the following output:
 
 ```console
-1: Started program
-1: Scheduled work on a separate thread
-6: Doing something on another thread.
+Thread 1: Started program
+Thread 1: Scheduled work on a separate thread
+Thread 6: Doing something on another thread.
 ```
 
 You might have a different number in place of `6`, but what's important is that it is different from the thread `1` on which our main method executes. In theory, you might even get `6` before the second `1` line, because as soon as we schedule the work on another thread - a thread is being picked up from the thread pool and the work is being executed there. If our second Log statement from the main thread was taking a long time to execute, the statement from the `Work` method might have been executed faster.
 
 Note that here we did not create or destroyed any threads. When application started, it created a number of threads for us and placed them in the **Thread pool**. We asked the thread pool to queue some work for us, and it got executed on one of the free threads off the thread pool, not spending time on creaton and deletion of any threads. As soon as our `Work` method is done, thread `6` is free and is returned to thread pool, so that it can be reused later by any other code that we might queue on the thread pool.
+
+The `QueueUserWorkItem` accepts a delegate that accepts `object? state` object, which can be used to pass the state inside our method that needs to be executed on another thread.
+
+Let's tweak our program to send the state to another thread:
+
+```csharp
+hl=3,5,14-15
+Logger.Log("Started program");
+
+var hello = "Hello!";
+
+ThreadPool.QueueUserWorkItem(Work, hello);
+Logger.Log("Scheduled work on a separate thread");
+
+Console.ReadLine();
+
+void Work(object? state)
+{
+    Logger.Log("Doing something on another thread.");
+
+    if (state != null)
+        Logger.Log($"{state}");
+}
+```
+
+Now we are using Thread 6 to print the state that we created in Thread 1:
+
+```console
+Thread 1: Started program
+Thread 1: Scheduled work on a separate thread
+Thread 6: Doing something on another thread.
+Thread 6: Hello!
+```
+
+> If you need to reduce amount of allocations or improve performance, make sure that whenever you are scheduling work on the thread pool - all the necessary data is being passed using **only** the `state` parameter. If a delegate references a variable outside its scope, it leads to creation of a closure, increasing number of allocations and decreasing performance.
+
+### QueueUserWorkItem limitations
+
+The method `QueueUserWorkItem` has one serious limitation: it returns `bool` result which denotes whether scheduling operation was successful or no (it would almost always be `true`) and there's no way to track our separate thread from the main one.
+
+What if we want to wait in the main thread until the background thread finishes its job before continuing? What if our background job fails and throws some exception? There's no way for us to find out whether our thread finished successfully or no, and we cannot influence the execution of the background job in any way.
+
+If we must use `QueueUserWorkItem` method, we need to make sure that it will never fail. We need to include a try/catch block inside `Work` method, and handle exception within another thread. What if we need data from the current thread to handle the exception?
+
+.NET provides a better abstraction for us: `Task`.
+
+### Task
 
 ### WIP
