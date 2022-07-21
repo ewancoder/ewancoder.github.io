@@ -150,6 +150,10 @@ function articleFactory(prefix, articles) {
                 return highlighting;
             }
 
+            if (infostring == 'console') {
+                return `<pre><code class="language-${infostring} hljs nohljsln">${code}</code></pre>`;
+            }
+
             return `<pre><code class="language-${infostring} hljs">${code}</code></pre>`;
         };
 
