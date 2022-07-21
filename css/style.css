@@ -18,6 +18,10 @@ body div {
     margin: 0;
 }
 
+.hljs-comment {
+    color: #080;
+}
+
 .language-csharp {
     background: #fff;
     border: 2px solid #888;
