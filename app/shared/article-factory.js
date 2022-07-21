@@ -17,6 +17,14 @@ function articleFactory(prefix, articles) {
         await loadArticleAsync(element, articleName);
         hljs.highlightAll();
         hljs.initLineNumbersOnLoad();
+        hljs.highlightLinesAll([
+            [], [], [], [],
+            [
+                {start: 1, end: 1, color: '#ee8'},
+                {start: 3, end: 3, color: '#ee8'},
+                {start: 9, end: 9, color: '#ee8'}
+            ]
+        ]);
     }
 
     async function loadArticleAsync(element, articleName) {
