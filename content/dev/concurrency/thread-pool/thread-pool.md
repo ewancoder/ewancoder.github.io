@@ -97,7 +97,7 @@ void Work(object? state)
 
 Now if we run this, we are going to get the following output:
 
-```
+```console
 1: Started program
 1: Scheduled work on a separate thread
 6: Doing something on another thread.
