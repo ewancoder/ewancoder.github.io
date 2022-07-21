@@ -83,6 +83,7 @@ public static class Logger
 And let's rewrite our example to this, adding some more logging:
 
 ```csharp
+hl=1,3,9
 Logger.Log("Started program");
 ThreadPool.QueueUserWorkItem(Work);
 Logger.Log("Scheduled work on a separate thread");

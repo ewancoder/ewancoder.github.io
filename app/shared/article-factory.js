@@ -1,5 +1,6 @@
 function articleFactory(prefix, articles) {
     const contentPrefix = `content/${prefix}`;
+    let highlighting = [];
 
     return ({
         refreshPageAsync
@@ -10,6 +11,7 @@ function articleFactory(prefix, articles) {
             await loadMainPageAsync(element);
             hljs.highlightAll();
             hljs.initLineNumbersOnLoad();
+            hljs.highlightLinesAll(highlighting);
             return;
         }
 
@@ -17,14 +19,7 @@ function articleFactory(prefix, articles) {
         await loadArticleAsync(element, articleName);
         hljs.highlightAll();
         hljs.initLineNumbersOnLoad();
-        hljs.highlightLinesAll([
-            [], [], [], [],
-            [
-                {start: 1, end: 1, color: '#ee8'},
-                {start: 3, end: 3, color: '#ee8'},
-                {start: 9, end: 9, color: '#ee8'}
-            ]
-        ]);
+        hljs.highlightLinesAll(highlighting);
     }
 
     async function loadArticleAsync(element, articleName) {
@@ -129,6 +124,35 @@ function articleFactory(prefix, articles) {
             return hElement + '\n';
         };
 
+        const codeHighlighting = [];
+        renderer.code = function(code, infostring, escaped) {
+            const firstLine = code.split('\n')[0];
+            if (firstLine.startsWith('hl=')) {
+                code = code.split('\n').slice(1).join('\n');
+                codeHighlighting.push(parseHighlighting(firstLine));
+            } else {
+                codeHighlighting.push([]);
+            }
+
+            function parseHighlighting(highlightingLine) {
+                const lines = highlightingLine.split('=')[1].split(',');
+                const highlighting = [];
+
+                for (let line of lines) {
+                    let startEnd = line.split('-');
+                    if (startEnd.length == 1) {
+                        highlighting.push({start: startEnd[0], end: startEnd[0], color: '#ee8'});
+                    } else {
+                        highlighting.push({start: startEnd[0], end: startEnd[1], color: '#ee8'});
+                    }
+                }
+
+                return highlighting;
+            }
+
+            return `<pre><code class="language-${infostring} hljs">${code}</code></pre>`;
+        };
+
         marked.setOptions({
             renderer: renderer,
             baseUrl: baseUrl
@@ -143,6 +167,8 @@ function articleFactory(prefix, articles) {
             content = content.replace('<p>[TOC]</p>', tocContent);
         }
 
+        // TODO: Return highlighting here as well, instead of using global variables.
+        highlighting = codeHighlighting;
         return content;
     }
 
