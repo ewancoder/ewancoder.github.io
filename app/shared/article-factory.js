@@ -1,4 +1,5 @@
 function articleFactory(prefix, articles) {
+    const lineHighlightColor = '#ee8';
     const contentPrefix = `content/${prefix}`;
     let highlighting = [];
 
@@ -141,9 +142,9 @@ function articleFactory(prefix, articles) {
                 for (let line of lines) {
                     let startEnd = line.split('-');
                     if (startEnd.length == 1) {
-                        highlighting.push({start: startEnd[0], end: startEnd[0], color: '#ee8'});
+                        highlighting.push({start: startEnd[0], end: startEnd[0], color: lineHighlightColor});
                     } else {
-                        highlighting.push({start: startEnd[0], end: startEnd[1], color: '#ee8'});
+                        highlighting.push({start: startEnd[0], end: startEnd[1], color: lineHighlightColor});
                     }
                 }
 
