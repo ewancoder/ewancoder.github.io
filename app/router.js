@@ -4,9 +4,20 @@ import * as dev from './dev/dev.js';
 
 const navigationBarElement = document.getElementById('navigation-bar');
 const routerElement = document.getElementById('router');
+const menuElement = document.getElementById('menu');
 
 let currentPath = undefined;
 let currentAnchor = undefined;
+
+function menuOff() {
+    menuElement.classList.add('shrink');
+    menuElement.classList.remove('grow');
+}
+
+function menuOn() {
+    menuElement.classList.add('grow');
+    menuElement.classList.remove('shrink');
+}
 
 function generateAnchorLinks() {
     document.querySelectorAll('.anchor-link').forEach(element => {
@@ -60,6 +71,7 @@ async function refreshPageAsync() {
     if (!currentPath) {
         // Home page.
         navigationBarElement.innerHTML = '';
+        menuOn();
         await mainpage.refreshPageAsync(routerElement, currentPath);
         return;
     }
@@ -68,6 +80,8 @@ async function refreshPageAsync() {
         // Articles (blog) page.
         const info = await articles.refreshPageAsync(routerElement, currentPath);
         refreshNavigationBar("Articles", info);
+
+        if (info) menuOff(); else menuOn();
         return;
     }
 
@@ -78,6 +92,8 @@ async function refreshPageAsync() {
 
         const info = await dev.refreshPageAsync(routerElement, currentPath);
         refreshNavigationBar("Development", info);
+
+        if (info) menuOff(); else menuOn();
         return;
     }
 
@@ -88,6 +104,7 @@ async function refreshPageAsync() {
         p.innerHTML = 'Apart from programming I am sim racing - racing virtual cars on virtual tracks with real people. The tracks are laser-scanned and the physics is simulated, so it\'s not an easy thing. But I\'m learning and driving faster with each passing day.';
 
         routerElement.appendChild(p);
+        menuOn();
         return;
     }
 
@@ -98,11 +115,13 @@ async function refreshPageAsync() {
         p.innerHTML = 'Here I\'ll add a list of my projects, both personal ones and the descriptions of those I worked on during the years. One of the personal projects is TypingRealm - a tool & game to help learn touchtyping. It\s a network game and involves a bunch of concurrency concerns.';
 
         routerElement.appendChild(p);
+        menuOn();
         return;
     }
 
     // Load main page if route contains unknown path.
     navigationBarElement.innerHTML = '';
+    menuOn();
     await mainpage.refreshPageAsync(routerElement, currentPath);
 }
 
