@@ -43,8 +43,6 @@ That's what single-core processor does: it performs operations one at a time:
 
 And while doing this, the CPU is completely occupied. It uses 100% of it's own resources to peel bananas as fast as possible, and while it's peeling a banana - it's unable to do anything else. In fact, after peeling lots of bananas, the CPU becomes tired (hot) because it was working at 100% capacity for quite a bit of time, peeling banana after banana.
 
-![Tired CPU](tired-cpu.jpg)
-
 So, peeling one banana takes 3 seconds, peeling second banana takes another 3 seconds, totalling in 6 seconds.
 
 Now, the person who asked us to peel the normal banana is happy. His banana has been peeled very fast, in mere 3 seconds! Now he can eat it. But the person who brought us the green banana is angry. He was sitting there waiting for his banana to be peeled for 6 whole seconds. And what's worse, his banana hasn't even started to be peeled for 3 whole seconds! So from the point of view of the green person - his request got frozen for 3 seconds and got picked up only after this time has elapsed.
