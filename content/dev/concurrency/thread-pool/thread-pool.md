@@ -219,4 +219,4 @@ Thread 1: Finished waiting for task
 
 Tasks are the main building block of concurrency in .NET, they have many useful properties so you can build sophisticated asynchronous flows with ease, abstracting away from the underlying threads implementation.
 
-In the next article, we are going to cover the most important aspects of a `Task`, and how we can use it in .NET.
+In the next article, we are going to cover the most important aspects of a `Task`, and how we can use it in .NET. The important thing to understand from this article is: in 90% of cases, you want to use **Task** for any concurrency scenario. Resourt to other means only if you have a very specific need for it.
