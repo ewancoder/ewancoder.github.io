@@ -2,6 +2,7 @@ import * as mainpage from './mainpage.js';
 import * as articles from './articles/articles.js';
 import * as dev from './dev/dev.js';
 
+const navigationBarElement = document.getElementById('navigation-bar');
 const routerElement = document.getElementById('router');
 
 let currentPath = undefined;
@@ -58,17 +59,22 @@ async function refreshPageAsync() {
 
     if (!currentPath) {
         // Home page.
+        navigationBarElement.innerHTML = '';
         await mainpage.refreshPageAsync(routerElement, currentPath);
         return;
     }
 
     if (currentPath.startsWith('/articles')) {
+        refreshNavigationBar();
+
         // Articles (blog) page.
         await articles.refreshPageAsync(routerElement, currentPath);
         return;
     }
 
     if (currentPath.startsWith('/dev')) {
+        refreshNavigationBar();
+
         const p = document.createElement('p');
         p.innerHTML = 'I am a .NET backend developer. During years of programming I stumbled upon nontrivial problems that a lot of people stumble upon, but that are not easy to solve without prior experience. Here I\'m sharing all this knowledge as a set of themed articles.';
 
@@ -79,6 +85,8 @@ async function refreshPageAsync() {
     }
 
     if (currentPath.startsWith('/simracing')) {
+        refreshNavigationBar();
+
         const p = document.createElement('p');
         p.innerHTML = 'Apart from programming I am sim racing - racing virtual cars on virtual tracks with real people. The tracks are laser-scanned and the physics is simulated, so it\'s not an easy thing. But I\'m learning and driving faster with each passing day.';
 
@@ -87,6 +95,8 @@ async function refreshPageAsync() {
     }
 
     if (currentPath.startsWith('/projects')) {
+        refreshNavigationBar();
+
         const p = document.createElement('p');
         p.innerHTML = 'Here I\'ll add a list of my projects, both personal ones and the descriptions of those I worked on during the years. One of the personal projects is TypingRealm - a tool & game to help learn touchtyping. It\s a network game and involves a bunch of concurrency concerns.';
 
@@ -95,7 +105,38 @@ async function refreshPageAsync() {
     }
 
     // Load main page if route contains unknown path.
+    navigationBarElement.innerHTML = '';
     await mainpage.refreshPageAsync(routerElement, currentPath);
+}
+
+function refreshNavigationBar() {
+    navigationBarElement.innerHTML = '';
+
+    const firstPart = currentPath.split('/')[1];
+    const secondPart = currentPath.split('/').slice(2).join('/');
+
+    const home = document.createElement('a');
+    home.innerHTML = 'Home';
+    home.classList.add('navigation-link');
+    home.setAttribute('href', '#/');
+
+    const navigationFirstPart = document.createElement('a');
+    navigationFirstPart.innerHTML = firstPart;
+    navigationFirstPart.classList.add('navigation-link');
+    navigationFirstPart.setAttribute('href', `#/${firstPart}`)
+
+    const navigationSecondPart = document.createElement('a');
+    if (secondPart) {
+        navigationSecondPart.innerHTML = secondPart;
+        navigationSecondPart.classList.add('navigation-link');
+        navigationSecondPart.setAttribute('href', `#/${firstPart}/${secondPart}`);
+    }
+
+    navigationBarElement.appendChild(home);
+    navigationBarElement.appendChild(navigationFirstPart);
+    if (secondPart) {
+        navigationBarElement.appendChild(navigationSecondPart);
+    }
 }
 
 export { processRoutingAsync };

@@ -14,6 +14,21 @@ body div {
     margin: 0 20px;
 }
 
+.navigation-link {
+    font-size: 1.5rem;
+    color: inherit;
+    text-decoration: none;
+    margin: 4px;
+    padding: 10px 30px;
+    background-color: #ccc;
+    transition: 0.1s;
+}
+
+.navigation-link:hover {
+    background-color: #f80;
+    box-shadow: 3px 3px 10px #888;
+}
+
 .highlight-line {
     margin: 0;
 }
