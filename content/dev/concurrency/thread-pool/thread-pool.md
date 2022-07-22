@@ -155,4 +155,66 @@ If we must use `QueueUserWorkItem` method, we need to make sure that it will nev
 
 ### Task
 
-### WIP
+Starting from .NET 4, we have a much better, universal abstraction for concurrent operations: **Task**. **Task** is a class that encapsulates all the logic needed to schedule a piece of work on the thread pool, to track it's status and to allow querying the result and/or handling exceptions.
+
+> **Task** is an abstraction over a piece of work that needs to be done, not over some particular thread. In fact, single Task can run its job on many different threads, switching between them if needed, as well as just waiting without using any threads at all. We'll get down to it later.
+
+The following pieces of code are completely identical in how they work, and I would encourage everyone to use the second one.
+
+```csharp
+// Queuing work on thread pool.
+ThreadPool.QueueUserWorkItem(Work);
+Console.ReadLine();
+
+void Work(object? state)
+{
+    Logger.Log("Doing something on another thread.");
+}
+
+
+
+// Queuing work on thread pool.
+Task.Run(WorkForTask);
+Console.ReadLine();
+
+void WorkForTask()
+{
+    Logger.Log("Doing something on another thread.");
+}
+```
+
+`Task.Run` method accepts `Action` delegate, so as you can see there's no need to pass the state object. Furthermore, the result of the `Run` method is a `Task` object which contains all information about the running job. We can save it into the variable and wait for a result later.
+
+> If you still care about performance and you need to avoid allocations, you can use `TaskFactory` static class which allows creating Tasks with many different options, as well as specifying `state` object that we used with `QueueUserWorkItem` method to avoid closure allocations.
+
+```csharp
+Logger.Log("Started application");
+
+var task = Task.Run(WorkForTask);
+
+Logger.Log("Created task");
+
+task.Wait();
+
+Logger.Log("Finished waiting for task");
+
+void WorkForTask()
+{
+    Logger.Log("Doing something on another thread.");
+}
+```
+
+`Wait()` method **blocks** current thread and waits until the job that is executing within the task stored in the variable `task` is finished. Only after it has finished, the execution of the main is continued. **Blocking** the thread means that the thread is waiting without doing anything. Usually we want to avoid blocking threads, but in this example we are blocking the main thread instead of using `Console.ReadLine()`, so that application doesn't exit until our task finishes execution, which is completely fine.
+
+Once we run this, we'll get the following output:
+
+```console
+Thread 1: Started application
+Thread 1: Created task
+Thread 6: Doing something on another thread.
+Thread 1: Finished waiting for task
+```
+
+Tasks are the main building block of concurrency in .NET, they have many useful properties so you can build sophisticated asynchronous flows with ease, abstracting away from the underlying threads implementation.
+
+In the next article, we are going to cover the most important aspects of a `Task`, and how we can use it in .NET.
