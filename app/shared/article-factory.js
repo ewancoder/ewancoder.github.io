@@ -3,16 +3,16 @@ function articleFactory(prefix, articles) {
     const contentPrefix = `content/${prefix}`;
     let highlighting = [];
 
+    let currentPageTitle = undefined; // TODO: Move to return type instead of global variable.
+
     return ({
         refreshPageAsync
     });
 
     async function refreshPageAsync(element, path) {
         if (path == `/${prefix}`) {
-            await loadMainPageAsync(element);
-            hljs.highlightAll();
-            hljs.initLineNumbersOnLoad();
-            hljs.highlightLinesAll(highlighting);
+            // Don't block on waiting for all the articles.
+            loadMainPageAsync(element);
             return;
         }
 
@@ -21,10 +21,23 @@ function articleFactory(prefix, articles) {
         hljs.highlightAll();
         hljs.initLineNumbersOnLoad();
         hljs.highlightLinesAll(highlighting);
+        return {
+            title: currentPageTitle
+        };
+    }
+
+    async function loadMainPageAsync(element) {
+        await loadMainPageAsync(element);
+        hljs.highlightAll();
+        hljs.initLineNumbersOnLoad();
+        hljs.highlightLinesAll(highlighting);
+        currentPageTitle = undefined;
     }
 
     async function loadArticleAsync(element, articleName) {
         const content = await loadMarkdownArticleAsync(articleName);
+
+        currentPageTitle = content.split('\n')[0].replaceAll('#', '').trim();
 
         loadFullArticle(element, content, articleName);
     }

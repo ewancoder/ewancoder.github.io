@@ -65,26 +65,24 @@ async function refreshPageAsync() {
     }
 
     if (currentPath.startsWith('/articles')) {
-        refreshNavigationBar();
-
         // Articles (blog) page.
-        await articles.refreshPageAsync(routerElement, currentPath);
+        const info = await articles.refreshPageAsync(routerElement, currentPath);
+        refreshNavigationBar("Articles", info);
         return;
     }
 
     if (currentPath.startsWith('/dev')) {
-        refreshNavigationBar();
-
         /*const p = document.createElement('p');
         p.innerHTML = 'I am a .NET backend developer. During years of programming I stumbled upon nontrivial problems that a lot of people stumble upon, but that are not easy to solve without prior experience. Here I\'m sharing all this knowledge as a set of themed articles.';
         routerElement.appendChild(p);*/
 
-        await dev.refreshPageAsync(routerElement, currentPath);
+        const info = await dev.refreshPageAsync(routerElement, currentPath);
+        refreshNavigationBar("Development", info);
         return;
     }
 
     if (currentPath.startsWith('/simracing')) {
-        refreshNavigationBar();
+        refreshNavigationBar('Simracing');
 
         const p = document.createElement('p');
         p.innerHTML = 'Apart from programming I am sim racing - racing virtual cars on virtual tracks with real people. The tracks are laser-scanned and the physics is simulated, so it\'s not an easy thing. But I\'m learning and driving faster with each passing day.';
@@ -94,7 +92,7 @@ async function refreshPageAsync() {
     }
 
     if (currentPath.startsWith('/projects')) {
-        refreshNavigationBar();
+        refreshNavigationBar('Projects');
 
         const p = document.createElement('p');
         p.innerHTML = 'Here I\'ll add a list of my projects, both personal ones and the descriptions of those I worked on during the years. One of the personal projects is TypingRealm - a tool & game to help learn touchtyping. It\s a network game and involves a bunch of concurrency concerns.';
@@ -108,7 +106,7 @@ async function refreshPageAsync() {
     await mainpage.refreshPageAsync(routerElement, currentPath);
 }
 
-function refreshNavigationBar() {
+function refreshNavigationBar(section, articleInfo) {
     navigationBarElement.innerHTML = '';
 
     const firstPart = currentPath.split('/')[1];
@@ -120,13 +118,13 @@ function refreshNavigationBar() {
     home.setAttribute('href', '#/');
 
     const navigationFirstPart = document.createElement('a');
-    navigationFirstPart.innerHTML = firstPart;
+    navigationFirstPart.innerHTML = section;
     navigationFirstPart.classList.add('navigation-link');
     navigationFirstPart.setAttribute('href', `#/${firstPart}`)
 
     const navigationSecondPart = document.createElement('a');
     if (secondPart) {
-        navigationSecondPart.innerHTML = secondPart;
+        navigationSecondPart.innerHTML = articleInfo.title;
         navigationSecondPart.classList.add('navigation-link');
         navigationSecondPart.setAttribute('href', `#/${firstPart}/${secondPart}`);
     }
