@@ -75,10 +75,9 @@ async function refreshPageAsync() {
     if (currentPath.startsWith('/dev')) {
         refreshNavigationBar();
 
-        const p = document.createElement('p');
+        /*const p = document.createElement('p');
         p.innerHTML = 'I am a .NET backend developer. During years of programming I stumbled upon nontrivial problems that a lot of people stumble upon, but that are not easy to solve without prior experience. Here I\'m sharing all this knowledge as a set of themed articles.';
-
-        routerElement.appendChild(p);
+        routerElement.appendChild(p);*/
 
         await dev.refreshPageAsync(routerElement, currentPath);
         return;
