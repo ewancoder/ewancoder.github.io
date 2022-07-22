@@ -6,6 +6,8 @@ In this article we are going to discuss the basics of concurrency in .NET Framew
 
 > Make sure to check the [Introduction to concurrency](#/dev/concurrency/introduction/introduction) article if you want to know about the concurrency in general.
 
+> The next article in this series is [Task](#/dev/concurrency/task/task) - all about `Task` abstraction in .NET.
+
 ### ThreadPool
 
 A short summary from the previous article:
