@@ -6,8 +6,8 @@ const navigationBarElement = document.getElementById('navigation-bar');
 const routerElement = document.getElementById('router');
 const menuElement = document.getElementById('menu');
 
-let currentPath = undefined;
-let currentAnchor = undefined;
+let currentPath = null;
+let currentAnchor = null;
 
 function menuOff() {
     menuElement.classList.add('shrink');
