@@ -21,10 +21,12 @@ function menuOn() {
 
 function generateAnchorLinks() {
     document.querySelectorAll('.anchor-link').forEach(element => {
-        element.addEventListener('click', () => {
-            const id = element.id.split('_')[1];
-            window.location.hash = `${currentPath}#${id}`;
-        });
+        const id = element.id.split('_')[1];
+        if (id) {
+            element.addEventListener('click', () => {
+                window.location.hash = `${currentPath}#${id}`;
+            });
+        }
     });
 }
 
