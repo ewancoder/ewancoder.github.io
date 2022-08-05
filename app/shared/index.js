@@ -1,1 +1,1 @@
-export * from './article-factory.js';
+export { articleFactory } from './article-factory.js';
