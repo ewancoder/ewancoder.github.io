@@ -4,6 +4,8 @@ In this article we are going to discuss the basics of concurrency in .NET Framew
 
 [TOC]
 
+> Please note that while this article focuses on **ThreadPool** class, the preferable method of scheduling concurrent work is by using a **Task** abstraction. Please refer to the next article to learn about this class.
+
 ### ThreadPool
 
 A short summary from the previous article:
