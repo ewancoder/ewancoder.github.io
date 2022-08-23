@@ -4,6 +4,4 @@
 
 [TOC]
 
-> Feel free to check the previous article of this series - [Thread pool - concurrency in .NET](#/dev/concurrency/thread-pool/thread-pool).
-
 ### WIP

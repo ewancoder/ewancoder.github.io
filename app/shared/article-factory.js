@@ -39,7 +39,53 @@ function articleFactory(prefix, articles) {
 
         currentPageTitle = content.split('\n')[0].replaceAll('#', '').trim();
 
-        loadFullArticle(element, content, articleName);
+        // Get previous and next articles info.
+        let previousArticleInfo = null;
+        let nextArticleInfo = null;
+
+        let first = true;
+        let prevName = null;
+        for (let name of articles) {
+            if (name === articleName && first) {
+                previousArticleInfo = null;
+                break;
+            }
+
+            if (name === articleName) {
+                previousArticleInfo = {
+                    title: await getArticleTitleAsync(prevName),
+                    articleName: prevName
+                };
+                break;
+            }
+
+            first = false;
+            prevName = name;
+        }
+
+        let next = false;
+        for (let name of articles) {
+            if (name === articleName) {
+                next = true;
+                continue;
+            }
+
+            if (next) {
+                nextArticleInfo = {
+                    title: await getArticleTitleAsync(name),
+                    articleName: name
+                };
+                break;
+            }
+        }
+
+        loadFullArticle(element, content, articleName, previousArticleInfo, nextArticleInfo);
+    }
+
+    async function getArticleTitleAsync(articleName) {
+        const content = await loadMarkdownArticleAsync(articleName);
+        const title = content.split('\n')[0].replaceAll('#', '').trim();
+        return title;
     }
 
     async function loadMainPageAsync(element) {
@@ -96,11 +142,11 @@ function articleFactory(prefix, articles) {
         element.appendChild(articleLink);
     }
 
-    function loadFullArticle(latestArticlesElement, content, articlePath) {
+    function loadFullArticle(latestArticlesElement, content, articlePath, previousArticleInfo, nextArticleInfo) {
         const articlePreview = document.createElement('div');
         articlePreview.classList.add('article-content');
         articlePreview.classList.add('open-article');
-        articlePreview.innerHTML = convertMarkdownToHtml(content, articlePath, false);
+        articlePreview.innerHTML = convertMarkdownToHtml(content, articlePath, false, previousArticleInfo, nextArticleInfo);
 
         const fullArticleBox = document.createElement('div');
         fullArticleBox.classList.add('full-article');
@@ -109,7 +155,15 @@ function articleFactory(prefix, articles) {
         latestArticlesElement.appendChild(fullArticleBox);
     }
 
-    function convertMarkdownToHtml(markdownContent, articlePath, isPreview) {
+    function convertMarkdownToHtml(markdownContent, articlePath, isPreview, previousArticleInfo, nextArticleInfo) {
+        if (nextArticleInfo) {
+            markdownContent = markdownContent.replace('[TOC]', `[TOC]\n\n> The next article in the series is [${nextArticleInfo.title}](#/${prefix}/${nextArticleInfo.articleName})`);
+        }
+
+        if (previousArticleInfo) {
+            markdownContent = markdownContent.replace('[TOC]', `[TOC]\n\n> Make sure to check out the previous article - [${previousArticleInfo.title}](#/${prefix}/${previousArticleInfo.articleName})`);
+        }
+
         let baseUrl = articlePath.substring(0, articlePath.lastIndexOf('/'));
         if (baseUrl) {
             baseUrl = `${contentPrefix}/${baseUrl}/`;

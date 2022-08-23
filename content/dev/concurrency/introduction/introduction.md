@@ -1,10 +1,8 @@
 ## Introduction to concurrency
 
-This is a short introduction into the world of concurrency: what it is, why we need it, and what programming problems we need to tackle when working with concurrency.
+This is a short introduction to the world of concurrency: what it is, why we need it, and what programming problems we need to tackle when working with concurrency.
 
 [TOC]
-
-> The next article in this series is [Thread pool - concurrency in .NET](#/dev/concurrency/thread-pool/thread-pool).
 
 Almost any application requires some kind of ability to run multiple tasks in parallel. When we are fetching data from database, we don't want the UI to freeze, we want the user to be able to click buttons and use our application. This requires two jobs running simultaneously at one time: *fetching the data* and *drawing the UI*.
 
