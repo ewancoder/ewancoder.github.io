@@ -23,7 +23,7 @@ When OS needs to run some work in parallel with already running other work, it:
 
 Creation and deletion of OS Threads is expensive operation, it takes CPU and Memory resources, so we should avoid creating a thread whenever we can.
 
-.NET Thread is an abstraction over OS Thread (usually), whenever you create a new .NET Thread - most likely a new OS thread would be requested from the OS. Furthermore, .NET objects for tracking the thread would need to be created and allocated in the memory, which creates even more overhead. All this means that we need to limit creating new threads as much as we can.
+.NET Thread is an abstraction over OS Thread (usually), whenever you create a new .NET Thread - most likely a new OS thread would be requested from the OS. Furthermore, for tracking the thread information .NET objects would need to be created and allocated in the memory, which creates even more overhead. All this means that we need to limit creating new threads as much as we can.
 
 For this reason, .NET provides an abstraction called **Thread pool** from which we can request threads without the need to create them.
 
@@ -45,9 +45,9 @@ void Work(object? state)
 }
 ```
 
-If you run this, you'll see that nothing gets printed into the console and program instantly exits. This is because by default all threads on the thread pool are *background threads*. When the main application's thread exits, the application doesn't wait for all background threads to finish, it kills them all and stops the application.
+If we run this, we'll see that nothing gets printed into the console and program instantly exits. This is because by default all threads on the thread pool are *background threads*. When the main application's thread exits, the application doesn't wait for all background threads to finish, it kills them all and stops the application.
 
-To fix this, let's add a single `Console.ReadLine();` statement to block the main thread until user presses Enter key:
+To fix this, let's add a single `Console.ReadLine();` statement to **block** the main thread until user presses Enter key:
 
 ```csharp
 ThreadPool.QueueUserWorkItem(Work);
@@ -66,13 +66,14 @@ Now we see this in the output:
 Doing something on another thread.
 ```
 
-Let's improve our console writer a bit, to give us more insight for future examples. Let's create a method that will print the message to console, also telling us from which thread we got the reply.
+Let's improve our console writer a bit, to give us more insight for future examples. Let's create a method that prints the message to console and also tells us from which thread we got this message.
 
 ```csharp
 public static class Logger
 {
     public static void Log(string message)
     {
+        // This property is a unique number assigned to every thread.
         var threadId = Thread.CurrentThread.ManagedThreadId;
 
         Console.WriteLine($"Thread {threadId}: {message}");
@@ -106,7 +107,7 @@ Thread 6: Doing something on another thread.
 
 You might have a different number in place of `6`, but what's important is that it is different from the thread `1` on which our main method executes. In theory, you might even get `6` before the second `1` line, because as soon as we schedule the work on another thread - a thread is being picked up from the thread pool and the work is being executed there. If our second Log statement from the main thread was taking a long time to execute, the statement from the `Work` method might have been executed faster.
 
-Note that here we did not create or destroyed any threads. When application started, it created a number of threads for us and placed them in the **Thread pool**. We asked the thread pool to queue some work for us, and it got executed on one of the free threads off the thread pool, not spending time on creaton and deletion of any threads. As soon as our `Work` method is done, thread `6` is free and is returned to thread pool, so that it can be reused later by any other code that we might queue on the thread pool.
+Note that here we did not create or destroyed any threads. When application started, it created a number of threads for us and placed them in the **Thread pool**. We asked the thread pool to queue some work for us, and it got executed on one of the free threads off the thread pool, not spending time on creation and deletion of any threads. As soon as our `Work` method is done, thread `6` is free and is returned to thread pool, so that it can be reused later by any other code that we might queue on the thread pool.
 
 The `QueueUserWorkItem` accepts a delegate that accepts `object? state` object, which can be used to pass the state inside our method that needs to be executed on another thread.
 
@@ -157,7 +158,7 @@ If we must use `QueueUserWorkItem` method, we need to make sure that it will nev
 
 Starting from .NET 4, we have a much better, universal abstraction for concurrent operations: **Task**. **Task** is a class that encapsulates all the logic needed to schedule a piece of work on the thread pool, to track it's status and to allow querying the result and/or handling exceptions.
 
-> **Task** is an abstraction over a piece of work that needs to be done, not over some particular thread. In fact, single Task can run its job on many different threads, switching between them if needed, as well as just waiting without using any threads at all. We'll get down to it later.
+> **Task** is an abstraction over **a piece of work that needs to be done**, not over some particular thread. In fact, single Task can run its job on many different threads, switching between them if needed, as well as just waiting without using any threads at all. We'll get down to it later.
 
 The following pieces of code are completely identical in how they work, and I would encourage everyone to use the second one.
 
@@ -217,4 +218,4 @@ Thread 1: Finished waiting for task
 
 Tasks are the main building block of concurrency in .NET, they have many useful properties so you can build sophisticated asynchronous flows with ease, abstracting away from the underlying threads implementation.
 
-In the next article, we are going to cover the most important aspects of a `Task`, and how we can use it in .NET. The important thing to understand from this article is: in 90% of cases, you want to use **Task** for any concurrency scenario. Resourt to other means only if you have a very specific need for it.
+In the next article we are going to cover the most important aspects of a `Task`, and how we can use it in .NET. The important thing to understand from this article is: in 90% of cases, you want to use **Task** for any concurrency scenario (or lately, *ValueTask*). Resort to other means only if you have a very specific need for it.
