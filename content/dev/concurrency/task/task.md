@@ -4,4 +4,14 @@
 
 [TOC]
 
+### Creating tasks
+
+### Inspecting the result
+
+### Handling exceptions
+
+### Chaining tasks, running multiple tasks
+
+### Async/Await basic syntax
+
 ### WIP
