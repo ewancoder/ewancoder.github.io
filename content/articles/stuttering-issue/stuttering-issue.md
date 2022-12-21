@@ -136,3 +136,24 @@ Here's the list of everything I did to make the system as stable as possible. Ev
 * Disabled external sound card (I already enabled it, because I need it, no more issues with it so far).
 * Removing wireless headphones USB-C receiver from USB-C port before racing.
 * Rebooting PC before racing (to remove all RDP sessions leftovers).
+
+## UPD (21 December)
+
+Using a number of tips left above, I was successfully using my PC without these stutters. However, today it just happened again, when playing sound through my wireless headphones connected to USB-C front input. Furthermore, I weren't using RDP at all! So I decided to test one more thing: I was under the assumption that USB-C is to blame so I took the USB-to-USB-C converter cable (that I found out I actually had coming from the headphones package) and put it in one of the back USB 3.0 slots.
+
+The issue was still present!
+
+I also noticed that the converter cable is USB 2.0 cable, so I thought I would try sticking it into USB 2.0 port. After I did - it started working flawlessly without freezes and stutters!
+
+After that, I tried sticking it to USB 3.1 slots / back to USB 2.0 slots: stutters appeared when connected to USB 3, and disappeared when connected to USB 2.
+
+So in summary:
+
+- when headphones are connected to USB 3 slots (be it a USB-C, or USB-A) - stuttering issue is there
+- when headphones are connected to USB 2 slot - stuttering disappears and everything works
+
+Assuming headphones are USB 2.0 device, we can assume that for some reason USB 2 device connected to USB 3 slot, that produces lots of throughput - makes Windows 10 stutter.
+
+From now on, I'm using the headphones connected to USB 2 port.
+
+For the record, I tested all USB 3 ports, and all of them induced stutters.
