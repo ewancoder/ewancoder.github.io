@@ -100,7 +100,9 @@ function articleFactory(prefix, articles) {
     }
 
     async function loadMarkdownArticleAsync(articleName) {
-        const response = await fetch(`/${contentPrefix}/${articleName}.md`);
+        const nameParts = articleName.split('/');
+        const name = nameParts[nameParts.length - 1];
+        const response = await fetch(`/${contentPrefix}/${articleName}/${name}.md`);
         return await response.text();
     }
 
@@ -175,7 +177,7 @@ function articleFactory(prefix, articles) {
         const toc = [];
 
         renderer.heading = function(text, level, raw) {
-            const id = this.options.headerPrefix + raw.toLowerCase().replace(/[^\w]+/g, '-');
+            const id = raw.toLowerCase().replace(/[^\w]+/g, '-');
             const aElement = `<a class="no-decoration" href="#/${prefix}/${articlePath}#${id}">${text}</a>`;
             const tocEntry = `<a class="no-decoration toc-item toc${level}" href="#/${prefix}/${articlePath}#${id}">${text}</a>`;
             const hElement = `<h${level} id="${id}">${aElement}</h${level}>`;
@@ -190,6 +192,12 @@ function articleFactory(prefix, articles) {
             });
 
             return hElement + '\n';
+        };
+
+        renderer.image = function(href, title, text) {
+            console.log(articlePath);
+            const imgElement = `<img src="/${contentPrefix}/${articlePath}/${href}" alt="${text}"></img>`;
+            return imgElement;
         };
 
         const codeHighlighting = [];

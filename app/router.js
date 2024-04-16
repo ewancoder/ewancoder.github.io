@@ -36,6 +36,8 @@ async function processRoutingAsync() {
         return;
     }
 
+    console.log(href);
+
     const hrefParts = href.split('#');
     const path = hrefParts[1];
     currentAnchor = hrefParts[2];
