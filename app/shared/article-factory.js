@@ -160,6 +160,7 @@ function articleFactory(prefix, articles) {
     function convertMarkdownToHtml(markdownContent, articlePath, isPreview, previousArticleInfo, nextArticleInfo) {
         if (nextArticleInfo) {
             markdownContent = markdownContent.replace('[TOC]', `[TOC]\n\n> The next article in the series is [${nextArticleInfo.title}](#/${prefix}/${nextArticleInfo.articleName})`);
+            markdownContent = `${markdownContent}\n\n> The next article in the series is [${nextArticleInfo.title}](#/${prefix}/${nextArticleInfo.articleName})`;
         }
 
         if (previousArticleInfo) {
