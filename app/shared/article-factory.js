@@ -177,16 +177,16 @@ function articleFactory(prefix, articles) {
         const renderer = new marked.Renderer();
         const toc = [];
 
-        renderer.heading = function(text, level, raw) {
-            const id = raw.toLowerCase().replace(/[^\w]+/g, '-');
-            const aElement = `<a class="no-decoration" href="#/${prefix}/${articlePath}#${id}">${text}</a>`;
-            const tocEntry = `<a class="no-decoration toc-item toc${level}" href="#/${prefix}/${articlePath}#${id}">${text}</a>`;
-            const hElement = `<h${level} id="${id}">${aElement}</h${level}>`;
+        renderer.heading = function(data) {
+            const id = data.raw.toLowerCase().replace(/[^\w]+/g, '-');
+            const aElement = `<a class="no-decoration" href="#/${prefix}/${articlePath}#${id}">${data.text}</a>`;
+            const tocEntry = `<a class="no-decoration toc-item toc${data.depth}" href="#/${prefix}/${articlePath}#${id}">${data.text}</a>`;
+            const hElement = `<h${data.depth} id="${id}">${aElement}</h${data.depth}>`;
 
             toc.push({
                 id: id,
-                level: level,
-                text: text,
+                level: data.level,
+                text: data.text,
                 aElement: aElement,
                 hElement: hElement,
                 tocEntry: tocEntry
@@ -195,14 +195,16 @@ function articleFactory(prefix, articles) {
             return hElement + '\n';
         };
 
-        renderer.image = function(href, title, text) {
-            console.log(articlePath);
-            const imgElement = `<img src="/${contentPrefix}/${articlePath}/${href}" alt="${text}"></img>`;
+        renderer.image = function(data) {
+            const imgElement = `<img src="/${contentPrefix}/${articlePath}/${data.href}" alt="${data.text}"></img>`;
             return imgElement;
         };
 
         const codeHighlighting = [];
-        renderer.code = function(code, infostring, escaped) {
+        renderer.code = function(data) {
+            let code = data.text;
+            let infostring = data.lang;
+
             const firstLine = code.split('\n')[0];
             if (firstLine.startsWith('hl=')) {
                 code = code.split('\n').slice(1).join('\n');
